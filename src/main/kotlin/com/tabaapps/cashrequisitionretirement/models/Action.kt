@@ -23,8 +23,14 @@ data class Action(
     @JoinTable(
         name = "title_action",
         joinColumns = [JoinColumn(name = "action_id")],
-        inverseJoinColumns = [JoinColumn(name = "title_id")]
-    )
+        inverseJoinColumns = [JoinColumn(name = "title_id")])
     var titles: List<Title>?
 
-) : BaseModel()
+) : BaseModel(){
+    enum class ActionType {
+        NEUTRAL,
+        FORWARD,
+        RETURN,
+        CLOSE
+    }
+}
