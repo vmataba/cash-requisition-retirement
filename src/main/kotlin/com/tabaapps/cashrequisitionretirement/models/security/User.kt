@@ -2,12 +2,7 @@ package com.tabaapps.cashrequisitionretirement.models.security
 
 import com.tabaapps.cashrequisitionretirement.models.BaseModel
 import com.tabaapps.cashrequisitionretirement.models.Employee
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.JoinColumn
-import jakarta.persistence.JoinTable
-import jakarta.persistence.ManyToMany
-import jakarta.persistence.OneToOne
+import jakarta.persistence.*
 import jakarta.validation.constraints.NotNull
 
 @Entity
@@ -25,6 +20,8 @@ data class User(
 
     @OneToOne(optional = false)
     var employee: Employee,
+
+    var hasDefaultPassword: Boolean = true,
 
     @ManyToMany
     @JoinTable(

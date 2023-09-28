@@ -6,6 +6,8 @@ import com.tabaapps.cashrequisitionretirement.models.security.UserRole
 import com.tabaapps.cashrequisitionretirement.repositories.security.RoleRepository
 import com.tabaapps.cashrequisitionretirement.repositories.security.UserRepository
 import com.tabaapps.cashrequisitionretirement.repositories.security.UserRoleRepository
+import com.tabaapps.cashrequisitionretirement.security.Configuration
+import com.tabaapps.cashrequisitionretirement.security.ResponseException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
@@ -21,6 +23,9 @@ class AuthService {
 
     @Autowired
     private lateinit var roleRepository: RoleRepository
+
+    @Autowired
+    private lateinit var securityConfig: Configuration
 
     fun saveUser(id: Long?, user: User): User {
         if (id == null) {
@@ -56,5 +61,13 @@ class AuthService {
         }
         userRoleRepository.deleteAll(userRoles)
         return userRoles.map { it.role }
+    }
+
+    fun login(username: String, password: String): User {
+        val user = userRepository.findByUsername(username).orElseThrow { ResponseException("Incorrect username or password") }
+        if (!securityConfig.loadPasswordEncoder().matches(password, user.password)) {
+            throw ResponseException("Incorrect username or password")
+        }
+        return user
     }
 }

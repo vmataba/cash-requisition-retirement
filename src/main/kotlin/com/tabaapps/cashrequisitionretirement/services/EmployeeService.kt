@@ -4,6 +4,7 @@ import com.tabaapps.cashrequisitionretirement.models.Employee
 import com.tabaapps.cashrequisitionretirement.models.security.User
 import com.tabaapps.cashrequisitionretirement.repositories.EmployeeRepository
 import com.tabaapps.cashrequisitionretirement.repositories.security.UserRepository
+import com.tabaapps.cashrequisitionretirement.security.Configuration
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
@@ -16,6 +17,9 @@ class EmployeeService {
 
     @Autowired
     lateinit var userRepository: UserRepository
+
+    @Autowired
+    lateinit var securityConfig: Configuration
 
     fun save(id: Long?, employee: Employee): Employee {
         if (id == null) {
@@ -35,7 +39,7 @@ class EmployeeService {
         val user = User(
             employee = employee,
             username = employee.email,
-            password = "default",
+            password = securityConfig.loadPasswordEncoder().encode(employee.lastName.uppercase()),
             isActive = false,
             roles = null
         )
