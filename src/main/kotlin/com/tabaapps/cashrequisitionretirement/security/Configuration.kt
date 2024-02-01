@@ -14,6 +14,7 @@ class Configuration {
     @Bean
     fun filterChain(httpSecurity: HttpSecurity): SecurityFilterChain {
         httpSecurity.authorizeHttpRequests {
+            //TODO: add proper security checking
             it.anyRequest().permitAll()
         }
         return httpSecurity.build()
